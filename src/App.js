@@ -1,35 +1,63 @@
 // import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Alert from './components/Alert';
+import About from './components/About';
+import Navbar from './components/Navbar';
+import TextForm from './components/TextForm';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 
 function App() {
+  const [mode, setMode] = useState('light');
+
+  const toggleMode = () => {
+    if (mode === 'light') {
+      setMode('dark');
+      document.body.style.background = '#282828';
+
+      showAlert('Dark mode has been enabled', 'success');
+    } else {
+      setMode('light');
+      document.body.style.background = '#FFFFFF';
+
+      showAlert('Light mode has been enabled', 'success');
+    }
+  }
+
+
+  // diaplay alert code starts here!!
+  const [alert, setAlert] = useState(null);
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg : message,
+      type : type
+    })
+
+    setTimeout(() => {
+      setAlert(null);
+    }, 2000);
+  }
+
   return (
     <>
-      <nav className='navbar navbar-expand-lg bg-light'>
-        <div className="container-fluid">
-          <a href="/" className="navbar-brand">TextUtils</a>
-
-          <button type='button' className='navbar-toggler' data-bs-toggle="collapse" data-bs-target='hamburger'>
-            <span className='navbar-toggler-icon'></span>
-          </button>
-          <div className="collpase navbar-collapse" id='hamburger'>
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a href="/" className="nav-link active">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/">About</a>
-              </li>
-            </ul>
-
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
+      <Router>
+        <Navbar brand={"TextUtils"} aboutText={'About-TextUtils'} mode={mode} toggleMode={toggleMode}/>
+        <Alert alert={alert}/>
+        <div className="container my-4">
+          <Routes>
+              <Route path="/" exact element={<TextForm heading={'Enter the text to analyse below'} mode={mode} showAlert={showAlert}/>}/>
+              <Route path="/about" exact element={<About/>} mode={mode}/>
+          </Routes>
         </div>
-      </nav>
+      </Router>
     </>
   );
 }
 
 export default App;
+
