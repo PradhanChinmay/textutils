@@ -41,3 +41,20 @@ body {
   }
 }
 
+@media only screen and (max-width : 426px) {
+
+  .change {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #find, #replace {
+    margin: 0.5rem 0;
+    width: 80% !important;
+  }
+
+  #replace {
+    margin-left: 0 !important;
+  }
+
+}
